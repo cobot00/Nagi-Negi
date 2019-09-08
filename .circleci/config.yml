@@ -1,0 +1,41 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/naginegi
+    docker:
+      - image: circleci/ruby:2.6.3
+        environment:
+          TZ: /usr/share/zoneinfo/Asia/Tokyo
+    steps:
+      - checkout
+
+      - restore_cache:
+          name: Restore bundle cache
+          key: naginegi-{{ checksum "Gemfile.lock" }}
+
+      - run:
+          name: Install Bundler
+          command: gem install bundler -v 1.17.3
+
+      - run:
+          name: Run bundle install
+          command: bundle install --path vendor/bundle
+
+      - save_cache:
+          name: Store bundle cache
+          key: naginegi-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+
+      - run:
+          name: chmod +x ./lint.sh
+          command: chmod +x ./lint.sh
+
+      - run:
+          name: ./lint.sh
+          command: ./lint.sh
+
+      - run:
+          name: Run rspec
+          command: bundle exec rspec spec/
+
