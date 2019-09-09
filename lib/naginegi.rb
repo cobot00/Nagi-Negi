@@ -1,4 +1,7 @@
 require 'naginegi/version'
+require 'naginegi/embulk_utility'
+require 'naginegi/embulk'
+require 'naginegi/mysql'
 
 module Naginegi
   class EmbulkClient
@@ -7,6 +10,13 @@ module Naginegi
     end
 
     def run(bq_config, target_table_names = [], retry_max = 0)
+      cmd = 'embulk --version'
+      unless system(cmd)
+        puts 'Cannot execute Embulk!!'
+        puts 'Cofirm Embulk install and environment'
+        return
+      end
+
       error_tables = run_and_retry(bq_config, target_table_names, retry_max, 0)
       error_tables.empty?
     end

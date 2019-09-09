@@ -1,6 +1,6 @@
 require 'json'
 require 'erb'
-require 'big_query'
+require 'google-cloud-bigquery'
 require 'unindent'
 require 'date'
 
@@ -13,17 +13,20 @@ module Naginegi
       password: <%= password %>
       database: <%= database %>
       host: <%= host %>
+      options: <%= options %>
       query: |
         <%= query %>
     out:
       type: bigquery
+      mode: replace
+      auth_method: <%= auth_method %>
+      json_keyfile: <%= json_keyfile %>
       project: <%= project %>
-      p12_keyfile: <%= p12_keyfile %>
       service_account_email: <%= service_account_email %>
       dataset: <%= dataset %>
       table: <%= table_name %>
       schema_path: <%= schema_path %>
-      auto_create_table: 1
+      auto_create_table: true
       path_prefix: <%= path_prefix %>
       source_format: NEWLINE_DELIMITED_JSON
       file_ext: .json.gz
@@ -58,9 +61,12 @@ module Naginegi
       user = database_config['username']
       password = database_config['password']
       database = database_config['database']
+      options = "{useLegacyDatetimeCode: false, serverTimezone: #{database_config['timezone']}}"
       query = Naginegi::BigQueryUtility.generate_sql(table_config, columns)
+
+      auth_method = @config['auth_method']
+      json_keyfile = @config['json_keyfile']
       project = @config['project_id']
-      p12_keyfile = @config['key']
       service_account_email = @config['service_email']
       dataset = database_config['bq_dataset']
       table_name = actual_table_name(table_config.name, database_config['daily_snapshot'] || table_config.daily_snapshot)
@@ -71,10 +77,11 @@ module Naginegi
     end
 
     def delete_table(dataset, table_name)
-      @config['dataset'] = dataset
-
-      bq = BigQuery::Client.new(@config)
-      bq.delete_table(table_name)
+      bq = Google::Cloud::Bigquery.new(
+        project: @config[:project_id],
+        keyfile: @config[:json_keyfile]
+      )
+      bq.service.delete_table(dataset, table_name)
     end
 
     def actual_table_name(table_name, daily_snapshot)

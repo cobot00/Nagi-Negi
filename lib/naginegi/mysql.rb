@@ -2,7 +2,7 @@ require 'mysql2-cs-bind'
 require 'json'
 require 'yaml'
 require 'fileutils'
-require 'samidare/bigquery_utility'
+require 'naginegi/bigquery_utility'
 
 module Naginegi
   module MySQL

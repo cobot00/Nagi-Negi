@@ -12,9 +12,6 @@ AllCops:
     - 'bin/*'
     - !ruby/regexp /old_and_unused\.rb$/
 
-Rails:
-  Enabled: true
-
 AlignParameters:
   Enabled: false
 
