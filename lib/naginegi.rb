@@ -4,7 +4,7 @@ require 'naginegi/embulk'
 require 'naginegi/mysql'
 
 module Naginegi
-  class EmbulkClient
+  class EmbulkRunner
     def generate_config(bq_config)
       Naginegi::EmbulkUtility::ConfigGenerator.new.generate_config(database_configs, bq_config)
     end
