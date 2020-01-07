@@ -1,7 +1,7 @@
 module Naginegi
   class EmbulkConfig
     def generate_config(database_configs, bq_config)
-      bq_utility = BigQueryUtility.new(bq_config)
+      bq_utility = BigQuery.new(bq_config)
 
       database_configs.keys.each do |db_name|
         database_config = database_configs[db_name]

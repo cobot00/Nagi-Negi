@@ -2,9 +2,9 @@ require 'spec_helper'
 require 'unindent'
 require 'timecop'
 
-RSpec.describe Naginegi::BigQueryUtility do
+RSpec.describe Naginegi::BigQuery do
   describe '.generate_schema' do
-    subject { Naginegi::BigQueryUtility.generate_schema(columns) }
+    subject { Naginegi::BigQuery.generate_schema(columns) }
 
     let(:columns) do
       [
@@ -28,7 +28,7 @@ RSpec.describe Naginegi::BigQueryUtility do
   end
 
   describe '.generate_sql' do
-    subject { Naginegi::BigQueryUtility.generate_sql(table_config, columns) }
+    subject { Naginegi::BigQuery.generate_sql(table_config, columns) }
 
     let(:columns) do
       [
@@ -56,7 +56,7 @@ RSpec.describe Naginegi::BigQueryUtility do
 
     after { Timecop.return }
 
-    subject { Naginegi::BigQueryUtility.new({}).actual_table_name(table_name, daily_snapshot) }
+    subject { Naginegi::BigQuery.new({}).actual_table_name(table_name, daily_snapshot) }
     let(:table_name) { 'users' }
     let(:daily_snapshot) { false }
 
@@ -75,7 +75,7 @@ RSpec.describe Naginegi::BigQueryUtility do
 
     after { Timecop.return }
 
-    subject { Naginegi::BigQueryUtility.new({}).actual_table_name(table_name, daily_snapshot) }
+    subject { Naginegi::BigQuery.new({}).actual_table_name(table_name, daily_snapshot) }
     let(:table_name) { 'users' }
     let(:daily_snapshot) { false }
 

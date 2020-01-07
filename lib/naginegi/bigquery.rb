@@ -5,7 +5,7 @@ require 'unindent'
 require 'date'
 
 module Naginegi
-  class BigQueryUtility
+  class BigQuery
     CONTENTS = <<-EOS.unindent
     in:
       type: mysql
@@ -62,7 +62,7 @@ module Naginegi
       password = database_config['password']
       database = database_config['database']
       options = "{useLegacyDatetimeCode: false, serverTimezone: #{database_config['timezone']}}"
-      query = Naginegi::BigQueryUtility.generate_sql(table_config, columns)
+      query = Naginegi::BigQuery.generate_sql(table_config, columns)
 
       auth_method = @config['auth_method']
       json_keyfile = @config['json_keyfile']
