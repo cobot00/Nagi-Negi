@@ -1,12 +1,12 @@
 require 'naginegi/version'
-require 'naginegi/embulk_utility'
+require 'naginegi/embulk_config'
 require 'naginegi/embulk'
 require 'naginegi/mysql'
 
 module Naginegi
   class EmbulkRunner
     def generate_config(bq_config)
-      Naginegi::EmbulkUtility::ConfigGenerator.new.generate_config(database_configs, bq_config)
+      Naginegi::EmbulkConfig.new.generate_config(database_configs, bq_config)
     end
 
     def run(bq_config, target_table_names = [], retry_max = 0)
