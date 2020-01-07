@@ -1,5 +1,12 @@
+require 'logger'
+
 module Naginegi
   class Embulk
+    def initialize
+      @logger = Logger.new(STDOUT)
+      @logger.datetime_format = '%Y-%m-%d %H:%M:%S'
+    end
+
     def run(database_configs, all_table_configs, bq_config, target_table_names = [])
       error_tables = []
       database_configs.keys.each do |db_name|
@@ -26,10 +33,11 @@ module Naginegi
 
       table_configs.each do |table_config|
         start_time = Time.now
-        log "table: #{table_config.name} - start"
+        @logger.info("table: #{table_config.name} - start")
 
         cmd = "embulk run #{bq_config['config_dir']}/#{db_name}/#{table_config.name}.yml"
-        log "cmd: #{cmd}"
+        @logger.info("cmd: #{cmd}")
+
         if system(cmd)
           result = 'success'
         else
@@ -38,18 +46,17 @@ module Naginegi
         end
 
         process_time = "table: #{table_config.name} - result: #{result}  #{format('%10.1f', Time.now - start_time)}sec"
-        log process_time
+        @logger.info(process_time)
+
         process_times << process_time
       end
-      log '------------------------------------'
-      log "db_name: #{db_name}"
-      process_times.each { |process_time| log process_time }
+
+      @logger.info('------------------------------------')
+      @logger.info("db_name: #{db_name}")
+
+      process_times.each { |process_time| @logger.info(process_time) }
 
       error_tables
-    end
-
-    def log(message)
-      puts "[#{Time.now.strftime('%Y-%m-%d %H:%M:%S')}] #{message}"
     end
   end
 end

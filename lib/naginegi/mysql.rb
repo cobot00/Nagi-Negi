@@ -2,7 +2,7 @@ require 'mysql2-cs-bind'
 require 'json'
 require 'yaml'
 require 'fileutils'
-require 'naginegi/bigquery_utility'
+require 'naginegi/bigquery'
 
 module Naginegi
   module MySQL
@@ -30,7 +30,7 @@ module Naginegi
 
       def generate_bq_schema(table_name)
         infos = columns(table_name)
-        BigQueryUtility.generate_schema(infos)
+        BigQuery.generate_schema(infos)
       end
 
       def columns(table_name)

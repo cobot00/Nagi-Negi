@@ -1,19 +1,25 @@
 require 'naginegi/version'
-require 'naginegi/embulk_utility'
+require 'naginegi/embulk_config'
 require 'naginegi/embulk'
 require 'naginegi/mysql'
+require 'logger'
 
 module Naginegi
-  class EmbulkClient
+  class EmbulkRunner
+    def initialize
+      @logger = Logger.new(STDOUT)
+      @logger.datetime_format = '%Y-%m-%d %H:%M:%S'
+    end
+
     def generate_config(bq_config)
-      Naginegi::EmbulkUtility::ConfigGenerator.new.generate_config(database_configs, bq_config)
+      Naginegi::EmbulkConfig.new.generate_config(database_configs, bq_config)
     end
 
     def run(bq_config, target_table_names = [], retry_max = 0)
       cmd = 'embulk --version'
       unless system(cmd)
-        puts 'Cannot execute Embulk!!'
-        puts 'Cofirm Embulk install and environment'
+        @logger.error('Cannot execute Embulk!!')
+        @logger.error('Cofirm Embulk install and environment')
         return
       end
 
@@ -31,9 +37,9 @@ module Naginegi
         target_table_names
       )
       if !error_tables.empty? && retry_count < retry_max
-        puts '------------------------------------'
-        puts 'retry start -> #{retry_count + 1} time'
-        puts '------------------------------------'
+        @logger.warn('------------------------------------')
+        @logger.warn("retry start -> #{retry_count + 1} time")
+        @logger.warn('------------------------------------')
         error_tables = run_and_retry(bq_config, error_tables, retry_max, retry_count + 1)
       end
       error_tables
