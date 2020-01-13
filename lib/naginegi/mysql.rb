@@ -67,21 +67,21 @@ module Naginegi
       attr_reader :column_name, :data_type
 
       TYPE_MAPPINGS = {
-        'int' => 'integer',
-        'tinyint' => 'integer',
-        'smallint' => 'integer',
-        'mediumint' => 'integer',
-        'bigint' => 'integer',
-        'float' => 'float',
-        'double' => 'float',
-        'decimal' => 'float',
-        'char' => 'string',
-        'varchar' => 'string',
-        'tinytext' => 'string',
-        'text' => 'string',
-        'date' => 'timestamp',
-        'datetime' => 'timestamp',
-        'timestamp' => 'timestamp'
+        'int' => 'INT64',
+        'tinyint' => 'INT64',
+        'smallint' => 'INT64',
+        'mediumint' => 'INT64',
+        'bigint' => 'INT64',
+        'float' => 'FLOAT64',
+        'double' => 'FLOAT64',
+        'decimal' => 'FLOAT64',
+        'char' => 'STRING',
+        'varchar' => 'STRING',
+        'tinytext' => 'STRING',
+        'text' => 'STRING',
+        'date' => 'TIMESTAMP',
+        'datetime' => 'TIMESTAMP',
+        'timestamp' => 'TIMESTAMP'
       }.freeze
 
       def initialize(column_name, data_type)
@@ -94,7 +94,7 @@ module Naginegi
       end
 
       def converted_value
-        if bigquery_data_type == 'timestamp'
+        if bigquery_data_type == 'TIMESTAMP'
           # time zone translate to UTC
           "UNIX_TIMESTAMP(#{escaped_column_name}) AS #{escaped_column_name}"
         elsif data_type == 'tinyint'

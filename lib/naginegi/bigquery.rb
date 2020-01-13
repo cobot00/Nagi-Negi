@@ -1,6 +1,6 @@
 require 'json'
 require 'erb'
-require 'google-cloud-bigquery'
+require 'google/cloud/bigquery'
 require 'unindent'
 require 'date'
 
@@ -18,14 +18,13 @@ module Naginegi
         <%= query %>
     out:
       type: bigquery
-      mode: replace
       auth_method: <%= auth_method %>
       json_keyfile: <%= json_keyfile %>
       project: <%= project %>
       service_account_email: <%= service_account_email %>
       dataset: <%= dataset %>
       table: <%= table_name %>
-      schema_path: <%= schema_path %>
+      schema_file: <%= schema_file %>
       auto_create_table: true
       path_prefix: <%= path_prefix %>
       source_format: NEWLINE_DELIMITED_JSON
@@ -70,7 +69,7 @@ module Naginegi
       service_account_email = @config['service_email']
       dataset = database_config['bq_dataset']
       table_name = actual_table_name(table_config.name, database_config['daily_snapshot'] || table_config.daily_snapshot)
-      schema_path = "#{@config['schema_dir']}/#{db_name}/#{table_config.name}.json"
+      schema_file = "#{@config['schema_dir']}/#{db_name}/#{table_config.name}.json"
       path_prefix = "/var/tmp/embulk_#{db_name}_#{table_config.name}"
 
       ERB.new(CONTENTS).result(binding)
@@ -78,8 +77,8 @@ module Naginegi
 
     def delete_table(dataset, table_name)
       bq = Google::Cloud::Bigquery.new(
-        project: @config[:project_id],
-        keyfile: @config[:json_keyfile]
+        project: @config['project_id'],
+        keyfile: @config['json_keyfile']
       )
       bq.service.delete_table(dataset, table_name)
     end

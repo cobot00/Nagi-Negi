@@ -17,9 +17,9 @@ RSpec.describe Naginegi::BigQuery do
     let(:schema_json) do
       <<-JSON.unindent
       [
-      {"name":"id","type":"integer"},
-      {"name":"name","type":"string"},
-      {"name":"created_at","type":"timestamp"}
+      {"name":"id","type":"INT64"},
+      {"name":"name","type":"STRING"},
+      {"name":"created_at","type":"TIMESTAMP"}
       ]
       JSON
     end

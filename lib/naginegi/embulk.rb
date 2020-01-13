@@ -14,7 +14,8 @@ module Naginegi
         error_tables += run_by_database(
           db_name,
           table_configs,
-          bq_config
+          bq_config,
+          db_configs[db_name]['bq_dataset']
         )
       end
       error_tables
@@ -27,13 +28,22 @@ module Naginegi
 
     private
 
-    def run_by_database(db_name, table_configs, bq_config)
+    def run_by_database(db_name, table_configs, bq_config, bq_dataset)
       process_times = []
       error_tables = []
+
+      bq_utility = Naginegi::BigQuery.new(bq_config)
 
       table_configs.each do |table_config|
         start_time = Time.now
         @logger.info("table: #{table_config.name} - start")
+
+        begin
+          bq_utility.delete_table(bq_dataset, table_config.name)
+          @logger.info("#{table_config.name} is deleted")
+        rescue => e
+          @logger.warn(e.message)
+        end
 
         cmd = "embulk run #{bq_config['config_dir']}/#{db_name}/#{table_config.name}.yml"
         @logger.info("cmd: #{cmd}")
