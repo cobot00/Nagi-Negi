@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 RSpec.describe Naginegi::Embulk do
-  describe '#target_table_configs' do
-    subject { Naginegi::Embulk.new.target_table_configs(table_configs, target_table_names) }
+  describe '#select_table_configs' do
+    subject { Naginegi::Embulk.new.select_table_configs(table_configs, target_table_names) }
 
     context 'all tables' do
       let(:table_hoge) { Naginegi::MySQL::TableConfig.new({ 'name' => 'hoge' }) }

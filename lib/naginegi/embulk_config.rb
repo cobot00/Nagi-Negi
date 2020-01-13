@@ -1,12 +1,12 @@
 module Naginegi
   class EmbulkConfig
-    def generate_config(database_configs, bq_config)
+    def generate_config(db_configs, bq_config)
       bq_utility = BigQuery.new(bq_config)
 
-      database_configs.keys.each do |db_name|
-        database_config = database_configs[db_name]
+      db_configs.keys.each do |db_name|
+        db_config = db_configs[db_name]
         table_configs = all_table_configs[db_name]
-        mysql_client = MySQL::MySQLClient.new(database_config)
+        mysql_client = MySQL::MySQLClient.new(db_config)
 
         table_configs.each do |table_config|
           write(
@@ -19,7 +19,7 @@ module Naginegi
             "#{table_config.name}.yml",
             bq_utility.generate_embulk_config(
               db_name,
-              database_config,
+              db_config,
               table_config,
               mysql_client.columns(table_config.name)
             )
