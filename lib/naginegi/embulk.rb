@@ -7,10 +7,10 @@ module Naginegi
       @logger.datetime_format = '%Y-%m-%d %H:%M:%S'
     end
 
-    def run(database_configs, all_table_configs, bq_config, target_table_names = [])
+    def run(db_configs, all_table_configs, bq_config, target_table_names = [])
       error_tables = []
-      database_configs.keys.each do |db_name|
-        table_configs = target_table_configs(all_table_configs[db_name], target_table_names)
+      db_configs.keys.each do |db_name|
+        table_configs = select_table_configs(all_table_configs[db_name], target_table_names)
         error_tables += run_by_database(
           db_name,
           table_configs,
@@ -20,7 +20,7 @@ module Naginegi
       error_tables
     end
 
-    def target_table_configs(table_configs, target_table_names)
+    def select_table_configs(table_configs, target_table_names)
       return table_configs if target_table_names.empty?
       table_configs.select { |table_config| target_table_names.include?(table_config.name) }
     end
