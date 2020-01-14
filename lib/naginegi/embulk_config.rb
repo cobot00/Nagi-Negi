@@ -11,6 +11,8 @@ module Naginegi
         case db_type
         when 'mysql'
           sql_client = MySQL::MySQLClient.new(db_config)
+        when 'postgresql'
+          sql_client = PostgreSQL::PgClient.new(db_config)
         end
 
         table_configs.each do |table_config|

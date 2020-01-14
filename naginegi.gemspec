@@ -29,5 +29,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'google-cloud-bigquery', '1.18.1'
   spec.add_dependency 'mysql2', '0.5.3'
   spec.add_dependency 'mysql2-cs-bind', '0.0.7'
+  spec.add_dependency 'pg', '1.2.2'
   spec.add_dependency 'unindent', '1.0'
 end
