@@ -8,14 +8,14 @@ module Naginegi
   class BigQuery
     CONTENTS = <<-EOS.unindent
     in:
-      type: mysql
+      type: <%= db_type %>
       user: <%= user %>
       password: <%= password %>
       database: <%= database %>
       host: <%= host %>
-      options: <%= options %>
       query: |
         <%= query %>
+      <%= options %>
     out:
       type: bigquery
       auth_method: <%= auth_method %>
@@ -55,20 +55,25 @@ module Naginegi
       sql
     end
 
-    def generate_embulk_config(db_name, database_config, table_config, columns)
-      host = database_config['host']
-      user = database_config['username']
-      password = database_config['password']
-      database = database_config['database']
-      options = "{useLegacyDatetimeCode: false, serverTimezone: #{database_config['timezone']}}"
+    def generate_embulk_config(db_name, db_config, table_config, columns)
+      db_type = db_config['db_type']
+      host = db_config['host']
+      user = db_config['username']
+      password = db_config['password']
+      database = db_config['database']
+      options = if db_type == 'mysql'
+                  "options: {useLegacyDatetimeCode: false, serverTimezone: #{db_config['timezone']}}"
+                else
+                  ''
+                end
       query = Naginegi::BigQuery.generate_sql(table_config, columns)
 
       auth_method = @config['auth_method']
       json_keyfile = @config['json_keyfile']
       project = @config['project_id']
       service_account_email = @config['service_email']
-      dataset = database_config['bq_dataset']
-      table_name = actual_table_name(table_config.name, database_config['daily_snapshot'] || table_config.daily_snapshot)
+      dataset = db_config['bq_dataset']
+      table_name = actual_table_name(table_config.name, db_config['daily_snapshot'] || table_config.daily_snapshot)
       schema_file = "#{@config['schema_dir']}/#{db_name}/#{table_config.name}.json"
       path_prefix = "/var/tmp/embulk_#{db_name}_#{table_config.name}"
 

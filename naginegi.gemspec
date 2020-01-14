@@ -21,13 +21,14 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_development_dependency 'bundler', '2.1.4'
-  spec.add_development_dependency 'rake', '~> 12.3.3'
-  spec.add_development_dependency 'rspec', '~> 3.8.0'
+  spec.add_development_dependency 'rake', '12.3.3'
+  spec.add_development_dependency 'rspec', '3.8.0'
   spec.add_development_dependency 'rubocop', '0.49.1'
   spec.add_development_dependency 'timecop', '0.9.1'
 
   spec.add_dependency 'google-cloud-bigquery', '1.18.1'
   spec.add_dependency 'mysql2', '0.5.3'
   spec.add_dependency 'mysql2-cs-bind', '0.0.7'
+  spec.add_dependency 'pg', '1.2.2'
   spec.add_dependency 'unindent', '1.0'
 end

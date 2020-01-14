@@ -2,6 +2,7 @@ require 'naginegi/version'
 require 'naginegi/embulk_config'
 require 'naginegi/embulk'
 require 'naginegi/mysql'
+require 'naginegi/postgresql'
 require 'logger'
 
 module Naginegi

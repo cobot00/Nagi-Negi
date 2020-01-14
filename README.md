@@ -24,30 +24,40 @@ You need to install `Embulk` and install some gems like below.
 
 ```bash
 embulk gem install embulk-input-mysql --version 0.10.1
+embulk gem install embulk-input-postgresql --version 0.10.1
 embulk gem install embulk-output-bigquery --version 0.6.4
 embulk gem install embulk-parser-jsonl --version 0.2.0
 embulk gem install embulk-formatter-jsonl --version 0.1.4
 ```
 
 ## Usage
-Require `database.yml` and `table.yml`.
+Require `database.yml` and `table.yml`.  
+`database.yml` requires `db_type` (mysql or postgresql).
+
+|RDBMS|db_type|
+|---|---|
+|MySQL|mysql|
+|PostgreSQL|postgresql|
+
 Below is a sample config file.
 
 ### database.yml
 ```yml
 db01:
+  db_type: mysql
   host: localhost
   username: root
   password: pswd
   database: production
-  bq_dataset: mysql_db01
+  bq_dataset: mysql
 
 db02:
+  db_type: postgresql
   host: localhost
   username: root
   password: pswd
   database: production
-  bq_dataset: mysql_db02
+  bq_dataset: pg
 
 ```
 

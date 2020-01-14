@@ -6,13 +6,20 @@ module Naginegi
       db_configs.keys.each do |db_name|
         db_config = db_configs[db_name]
         table_configs = all_table_configs[db_name]
-        mysql_client = MySQL::MySQLClient.new(db_config)
+        db_type = db_config['db_type']
+
+        case db_type
+        when 'mysql'
+          sql_client = MySQL::MySQLClient.new(db_config)
+        when 'postgresql'
+          sql_client = PostgreSQL::PgClient.new(db_config)
+        end
 
         table_configs.each do |table_config|
           write(
             "#{bq_config['schema_dir']}/#{db_name}",
             "#{table_config.name}.json",
-            mysql_client.generate_bq_schema(table_config.name)
+            sql_client.generate_bq_schema(table_config.name)
           )
           write(
             "#{bq_config['config_dir']}/#{db_name}",
@@ -21,7 +28,7 @@ module Naginegi
               db_name,
               db_config,
               table_config,
-              mysql_client.columns(table_config.name)
+              sql_client.columns(table_config.name)
             )
           )
         end
