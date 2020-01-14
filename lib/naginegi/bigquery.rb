@@ -8,7 +8,7 @@ module Naginegi
   class BigQuery
     CONTENTS = <<-EOS.unindent
     in:
-      type: mysql
+      type: <%= db_type %>
       user: <%= user %>
       password: <%= password %>
       database: <%= database %>
@@ -56,6 +56,7 @@ module Naginegi
     end
 
     def generate_embulk_config(db_name, database_config, table_config, columns)
+      db_type = database_config['db_type']
       host = database_config['host']
       user = database_config['username']
       password = database_config['password']
