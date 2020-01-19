@@ -92,7 +92,7 @@ config = {
  'config_dir' => '/var/tmp/embulk/config'
 }
 
-client = Naginegi::EmbulkClient.new
+client = Naginegi::EmbulkRunner.new
 client.generate_config(config)
 client.run(config)
 ```
