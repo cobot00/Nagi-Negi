@@ -9,10 +9,11 @@ module Naginegi
     CONTENTS = <<-EOS.unindent
     in:
       type: <%= db_type %>
+      host: <%= host %>
       user: <%= user %>
       password: <%= password %>
       database: <%= database %>
-      host: <%= host %>
+      ssl: <%= ssl %>
       query: |
         <%= query %>
       <%= options %>
@@ -61,6 +62,7 @@ module Naginegi
       user = db_config['username']
       password = db_config['password']
       database = db_config['database']
+      ssl = db_config['embulk_ssl_enable'] || false
       options = if db_type == 'mysql'
                   "options: {useLegacyDatetimeCode: false, serverTimezone: #{db_config['timezone']}}"
                 else

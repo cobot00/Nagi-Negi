@@ -43,7 +43,31 @@ module Naginegi
     end
 
     def all_table_configs
-      @all_table_configs ||= MySQL::TableConfig.generate_table_configs
+      @all_table_configs ||= Naginegi::TableConfig.generate_table_configs
+    end
+  end
+
+  class TableConfig
+    attr_reader :name, :daily_snapshot, :condition
+
+    def initialize(config)
+      @name = config['name']
+      @daily_snapshot = config['daily_snapshot'] || false
+      @condition = config['condition']
+    end
+
+    def self.generate_table_configs(file_path = 'table.yml')
+      configs = YAML.load_file(file_path)
+      configs.each_with_object({}) do |(db, database_config), table_configs|
+        table_configs[db] = database_config['tables'].map { |config| TableConfig.new(config) }
+        table_configs
+      end
+    end
+
+    def ==(other)
+      instance_variables.all? do |v|
+        instance_variable_get(v) == other.instance_variable_get(v)
+      end
     end
   end
 end

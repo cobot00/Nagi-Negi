@@ -39,13 +39,13 @@ RSpec.describe Naginegi::BigQuery do
     end
 
     context 'no condition' do
-      let(:table_config) { Naginegi::MySQL::TableConfig.new({ 'name' => 'simple' }) }
+      let(:table_config) { Naginegi::TableConfig.new({ 'name' => 'simple' }) }
       let(:sql) { "SELECT `id`,`name`,UNIX_TIMESTAMP(`created_at`) AS `created_at` FROM simple\n" }
       it { expect(subject).to eq sql }
     end
 
     context 'has condition' do
-      let(:table_config) { Naginegi::MySQL::TableConfig.new({ 'name' => 'simple', 'condition' => 'created_at >= CURRENT_DATE() - INTERVAL 3 MONTH' }) }
+      let(:table_config) { Naginegi::TableConfig.new({ 'name' => 'simple', 'condition' => 'created_at >= CURRENT_DATE() - INTERVAL 3 MONTH' }) }
       let(:sql) { "SELECT `id`,`name`,UNIX_TIMESTAMP(`created_at`) AS `created_at` FROM simple WHERE created_at >= CURRENT_DATE() - INTERVAL 3 MONTH\n" }
       it { expect(subject).to eq sql }
     end
