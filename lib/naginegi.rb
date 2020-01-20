@@ -7,11 +7,13 @@ require 'logger'
 
 module Naginegi
   class EmbulkRunner
-    def initialize(db_configs = nil)
+    def initialize(db_configs: nil, log_level: 'warn', embulk_run_option: '')
       @logger = Logger.new(STDOUT)
       @logger.datetime_format = '%Y-%m-%d %H:%M:%S'
 
       @db_configs = db_configs || YAML.load_file('database.yml')
+      @log_level = log_level
+      @embulk_run_option = embulk_run_option
     end
 
     def generate_config(bq_config)
@@ -33,7 +35,7 @@ module Naginegi
     private
 
     def run_and_retry(bq_config, target_table_names, retry_max, retry_count)
-      error_tables = Naginegi::Embulk.new.run(
+      error_tables = Naginegi::Embulk.new(@log_level, @embulk_run_option).run(
         @db_configs,
         table_configs,
         bq_config,

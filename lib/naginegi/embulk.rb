@@ -2,9 +2,12 @@ require 'logger'
 
 module Naginegi
   class Embulk
-    def initialize
+    def initialize(log_level, embulk_run_option)
       @logger = Logger.new(STDOUT)
       @logger.datetime_format = '%Y-%m-%d %H:%M:%S'
+
+      @log_level = log_level
+      @embulk_run_option = embulk_run_option
     end
 
     def run(db_configs, all_table_configs, bq_config, target_table_names = [])
@@ -45,7 +48,7 @@ module Naginegi
           @logger.warn(e.message)
         end
 
-        cmd = "embulk run #{bq_config['config_dir']}/#{db_name}/#{table_config.name}.yml"
+        cmd = "embulk run #{@embulk_run_option} #{bq_config['config_dir']}/#{db_name}/#{table_config.name}.yml --log-level #{@log_level}"
         @logger.info("cmd: #{cmd}")
 
         if system(cmd)
