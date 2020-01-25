@@ -77,8 +77,10 @@ db02:
     - name: configs
 ```
 
+### sample
 Naginegi requires BigQuery parameters like below.
 
+#### using json key file path
 ```ruby
 [sample.rb]
 require 'naginegi'
@@ -88,6 +90,37 @@ config = {
  'service_email' => 'SERVICE_ACCOUNT_EMAIL',
  'auth_method' => 'json_key',
  'json_keyfile' => 'JSON_KEYFILE_PATH',
+ 'schema_dir' => '/var/tmp/embulk/schema',
+ 'config_dir' => '/var/tmp/embulk/config'
+}
+
+client = Naginegi::EmbulkRunner.new
+client.generate_config(config)
+client.run(config)
+```
+
+```bash
+ruby sample.rb
+```
+
+#### using key values
+```ruby
+[sample.rb]
+require 'naginegi'
+
+json_key = {
+  "type" => "...",
+  "project_id" => "...",
+  "private_key_id" => "...",
+  "private_key" => "...",
+  ...
+}
+
+config = {
+ 'project_id' => 'BIGQUERY_PROJECT_ID',
+ 'service_email' => 'SERVICE_ACCOUNT_EMAIL',
+ 'auth_method' => 'json_key',
+ 'json_key' => json_key,
  'schema_dir' => '/var/tmp/embulk/schema',
  'config_dir' => '/var/tmp/embulk/config'
 }
