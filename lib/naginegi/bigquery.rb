@@ -21,6 +21,7 @@ module Naginegi
       type: bigquery
       auth_method: <%= auth_method %>
       json_keyfile: <%= json_keyfile %>
+        <%= json_key_content %>
       project: <%= project %>
       service_account_email: <%= service_account_email %>
       dataset: <%= dataset %>
@@ -71,7 +72,15 @@ module Naginegi
       query = Naginegi::BigQuery.generate_sql(table_config, columns)
 
       auth_method = @config['auth_method']
-      json_keyfile = @config['json_keyfile']
+      if @config['json_key']
+        values = @config['json_key'].map do |k, v|
+          value = v.gsub("\n", '\\n')
+          "\"#{k}\": \"#{value}\""
+        end
+        json_key_content = "content: |\n      {#{values.join(',')}}"
+      else
+        json_keyfile = @config['json_keyfile']
+      end
       project = @config['project_id']
       service_account_email = @config['service_email']
       dataset = db_config['bq_dataset']
