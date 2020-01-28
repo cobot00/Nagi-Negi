@@ -85,6 +85,11 @@ RSpec.describe Naginegi::MySQL::Column do
       let(:data_type) { 'timestamp' }
       it { expect(subject).to eq 'TIMESTAMP' }
     end
+
+    context 'json' do
+      let(:data_type) { 'json' }
+      it { expect(subject).to eq 'STRING' }
+    end
   end
 
   describe '#converted_value' do

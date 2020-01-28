@@ -95,6 +95,16 @@ RSpec.describe Naginegi::PostgreSQL::Column do
       let(:data_type) { 'boolean' }
       it { expect(subject).to eq 'BOOL' }
     end
+
+    context 'json' do
+      let(:data_type) { 'json' }
+      it { expect(subject).to eq 'STRING' }
+    end
+
+    context 'jsonb' do
+      let(:data_type) { 'jsonb' }
+      it { expect(subject).to eq 'STRING' }
+    end
   end
 
   describe '#converted_value' do
