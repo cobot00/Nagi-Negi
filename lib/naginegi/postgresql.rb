@@ -67,7 +67,7 @@ module Naginegi
       end
 
       def bigquery_data_type
-        TYPE_MAPPINGS[@data_type]
+        TYPE_MAPPINGS[@data_type] || 'STRING'
       end
 
       def converted_value

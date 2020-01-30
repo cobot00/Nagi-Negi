@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    naginegi (0.1.0)
+    naginegi (0.3.0)
       google-cloud-bigquery (= 1.18.1)
       mysql2 (= 0.5.3)
       mysql2-cs-bind (= 0.0.7)
@@ -53,7 +53,6 @@ GEM
     mini_mime (1.0.2)
     multi_json (1.14.1)
     multipart-post (2.1.1)
-    mysql2 (0.5.3)
     mysql2 (0.5.3-x64-mingw32)
     mysql2-cs-bind (0.0.7)
       mysql2
@@ -61,7 +60,6 @@ GEM
     parallel (1.19.1)
     parser (2.7.0.1)
       ast (~> 2.4.0)
-    pg (1.2.2)
     pg (1.2.2-x64-mingw32)
     powerpack (0.1.2)
     public_suffix (4.0.3)
