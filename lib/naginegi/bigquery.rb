@@ -92,9 +92,17 @@ module Naginegi
     end
 
     def delete_table(dataset, table_name)
+      keyfile = if @config['json_key']
+                  value = @config['json_key'].dup
+                  value['private_key'] = value['private_key'].gsub('\\n', "\n")
+                  value
+                else
+                  @config['json_keyfile']
+                end
+
       bq = Google::Cloud::Bigquery.new(
         project: @config['project_id'],
-        keyfile: @config['json_keyfile']
+        keyfile: keyfile
       )
       bq.service.delete_table(dataset, table_name)
     end
