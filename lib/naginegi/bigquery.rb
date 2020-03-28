@@ -19,6 +19,7 @@ module Naginegi
       <%= options %>
     out:
       type: bigquery
+      mode: replace
       auth_method: <%= auth_method %>
       json_keyfile: <%= json_keyfile %>
         <%= json_key_content %>
