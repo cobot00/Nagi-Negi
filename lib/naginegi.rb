@@ -20,7 +20,7 @@ module Naginegi
       Naginegi::EmbulkConfig.new.generate_config(@db_configs, bq_config)
     end
 
-    def run(bq_config, target_table_names = [], retry_max = 0)
+    def run(bq_config, target_table_names = [], retry_max = 2)
       cmd = 'embulk --version'
       unless system(cmd)
         @logger.error('Cannot execute Embulk!!')
