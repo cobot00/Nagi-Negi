@@ -29,6 +29,13 @@ module Naginegi
       end
 
       error_tables = run_and_retry(bq_config, target_table_names, retry_max, 0)
+      unless error_tables.empty?
+        @logger.error('------------------------------------')
+        @logger.error('[FAILED TABLES]')
+        error_tables.each { |table| @logger.error(table) }
+        @logger.error('------------------------------------')
+      end
+
       error_tables.empty?
     end
 
